@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: three-tier-dev
+  namespace: argocd
+spec:
+  project: three-tier-project
+  source:
+    repoURL: 'https://github.com/tiwarishivam18/three-tier.git'
+    targetRevision: dev
+    path: app-repo/helm/three-tier-app
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

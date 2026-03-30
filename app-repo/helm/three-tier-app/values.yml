@@ -1,0 +1,53 @@
+namespace: dev
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: tiwarishivam/frontend-app
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 3000
+  env:
+    BACKEND_URL: http://backend-service:5000
+
+backend:
+  replicaCount: 1
+  image:
+    repository: tiwarishivam/backend-app
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 5000
+  env:
+    DB_HOST: postgres-service
+    DB_PORT: "5432"
+    DB_NAME: userdb
+    DB_USER: postgres
+
+postgres:
+  replicaCount: 1
+  image:
+    repository: postgres
+    tag: "15"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 5432
+  db:
+    name: userdb
+    user: postgres
+    password: postgres123
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: ""
+
+ingress:
+  enabled: true
+  className: nginx
+  host: dev.three-tier.local
+  path: /
+  pathType: Prefix
