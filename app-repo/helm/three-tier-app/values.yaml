@@ -43,7 +43,7 @@ postgres:
   persistence:
     enabled: true
     size: 1Gi
-    storageClass: ""
+    storageClass: gp2
 
 ingress:
   enabled: true
